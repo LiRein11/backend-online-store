@@ -1,7 +1,16 @@
-class UserController {
-  async registration(req, res) {}
-  async login(req, res) {}
-  async check(req, res) {}
+const { Type } = require('../models/models');
+const ApiError = require('../error/ApiError');
+
+class TypeController {
+  async create(req, res) {
+    const { name } = req.body;
+    const type = await Type.create({ name });
+    return res.json(type);
+  }
+  async getAll(req, res) {
+    const types = await Type.findAll();
+    return res.json(types);
+  }
 }
 
-module.exports = new UserController();
+module.exports = new TypeController();
