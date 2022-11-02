@@ -38,7 +38,7 @@ class UserController {
     return res.json({ token });
   }
   async check(req, res, next) {
-    const token = generateJwt(req.userId.id, req.res.email, req.user.role);
+    const token = generateJwt(req.user.id, req.user.email, req.user.role);
     return res.json({ token });
   } // Генерация нового токена, для того, чтобы когда пользователь постоянно использует аккаунт, токен у него перезаписывался
   async getAllUsers(req, res) {

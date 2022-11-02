@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const path = require('path');
-const { Device, DeviceInfo } = require('../models/models');
+const { Device, DeviceInfo, BasketDevice } = require('../models/models');
 const ApiError = require('../error/ApiError');
 class DeviceController {
   async create(req, res, next) {
@@ -13,16 +13,15 @@ class DeviceController {
       const device = await Device.create({ name, price, brandId, typeId, img: fileName });
 
       if (info) {
-        info = JSON.parse(info); // Когда данные приходят из форм даты, то они приходят в виде строки, для этого их нужно спарсить
+        info = JSON.parse(info); // Когда данные приходят из форм даты, то они приходят в виде строки, для этого их нужно спарсить (приходит массив в виде строки)
         info.forEach((i) =>
           DeviceInfo.create({
             title: i.title,
             description: i.description,
-            deviceId: i.deviceId,
+            deviceId: device.id,
           }),
         );
       }
-
       return res.json(device);
     } catch (e) {
       next(ApiError.badRequest(e.message));
