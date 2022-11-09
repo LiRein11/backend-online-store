@@ -6,7 +6,7 @@ module.exports = async function (req, res, next) {
     const user = req.user;
     const userBasket = await Basket.findOne({ where: { userId: user.id } });
     const deviceItem = await BasketDevice.findOne({
-      where: { deviceId: id, basketId: userBasket.id },
+      where: { id: id, basketId: userBasket.id },
     });
 
     if (deviceItem) {

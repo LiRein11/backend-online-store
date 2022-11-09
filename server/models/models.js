@@ -7,7 +7,7 @@ const User = sequelize.define('user', {
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: 'USER' },
 });
-
+ 
 const Basket = sequelize.define('basket', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
@@ -22,6 +22,7 @@ const Device = sequelize.define('device', {
   price: { type: DataTypes.INTEGER, allowNull: false },
   rating: { type: DataTypes.INTEGER, defaultValue: 0 },
   img: { type: DataTypes.STRING, allowNull: false },
+  // basketDeviceId: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
 const Type = sequelize.define('type', {
