@@ -7,7 +7,7 @@ const User = sequelize.define('user', {
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: 'USER' },
 });
- 
+
 const Basket = sequelize.define('basket', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
@@ -22,7 +22,6 @@ const Device = sequelize.define('device', {
   price: { type: DataTypes.INTEGER, allowNull: false },
   rating: { type: DataTypes.INTEGER, defaultValue: 0 },
   img: { type: DataTypes.STRING, allowNull: false },
-  // basketDeviceId: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
 const Type = sequelize.define('type', {
@@ -50,6 +49,20 @@ const TypeBrand = sequelize.define('type_brand', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+const Order = sequelize.define('order', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  complete: { type: DataTypes.BOOLEAN, defaultValue: false },
+  mobile: { type: DataTypes.STRING(25), allowNull: false },
+  userId: { type: DataTypes.INTEGER, allowNull: true },
+});
+
+const OrderDevice = sequelize.define('order_device', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  deviceId: { type: DataTypes.INTEGER, allowNull: false },
+  orderId: { type: DataTypes.INTEGER, allowNull: false },
+  count: { type: DataTypes.INTEGER, allowNull: false },
+});
+
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
@@ -62,7 +75,7 @@ BasketDevice.belongsTo(Basket);
 Device.hasMany(BasketDevice);
 BasketDevice.belongsTo(Device);
 
-Device.hasMany(DeviceInfo, {as:'info'}); 
+Device.hasMany(DeviceInfo, { as: 'info' });
 DeviceInfo.belongsTo(Device);
 
 Device.hasMany(Rating);
@@ -77,6 +90,16 @@ Device.belongsTo(Brand);
 Type.belongsToMany(Brand, { through: TypeBrand });
 Brand.belongsToMany(Type, { through: TypeBrand });
 
+User.hasMany(Order);
+Order.belongsTo(User, {
+  foreignKey: { name: 'userId' },
+});
+
+Order.hasMany(OrderDevice);
+OrderDevice.belongsTo(Order, {
+  foreignKey: { name: 'orderId' },
+});
+
 module.exports = {
   User,
   Basket,
@@ -87,4 +110,6 @@ module.exports = {
   Type,
   DeviceInfo,
   TypeBrand,
+  Order,
+  OrderDevice,
 };
