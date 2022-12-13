@@ -66,9 +66,10 @@ class BasketController {
           include: {
             model: DeviceInfo,
             as: 'info',
+          },
         },
       },
-    }});
+    });
     return res.json(basket);
   }
 
@@ -88,6 +89,59 @@ class BasketController {
         }
       });
       return res.json('Продукт удален');
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async deleteBasket(req, res) {
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      const user = jwt.verify(token, process.env.SECRET_KEY);
+      console.log(user);
+      const { id } = await Basket.findOne({ where: { userId: user.id } });
+
+      console.log(id);
+      // await Basket.findOne({ where: { userId: user.id } }).then(async (userBasket) => {
+      if (id === user.id) {
+        const basket = await BasketDevice.findAll({
+          where: { basketId: id },
+          // include: {
+          //   model: Device,
+          //   include: {
+          //     model: DeviceInfo,
+          //     as: 'info',
+          //   },
+          // },
+        });
+        // console.log(basket)
+        // const basketArr = []
+        // for (let i = 0; i<basket.length; i++){
+        //   const basketDevice = await Device.findOne({
+        //     where: { id: basket[i].deviceId },
+        //     include: {
+        //       model: DeviceInfo,
+        //       as: 'info',
+        //       where: {
+        //         deviceId: basket[i].deviceId,
+        //         [Op.or]: [
+        //           {
+        //             deviceId: {
+        //               [Op.not]: null,
+        //             },
+        //           },
+        //         ],
+        //       },
+        //       required: false,
+        //     },
+        //   });
+        // })
+        // basketArr.push(basketDevice),
+        basket.destroy();
+      } else {
+        return res.json('Вы не можете удалить корзину, которая вам не принадлежит');
+      }
+      return res.json('Корзина удалена');
     } catch (e) {
       console.error(e);
     }

@@ -8,6 +8,12 @@ router.post('/', authMiddleware, basketController.addDevice);
 router.get('/devices', authMiddleware, basketController.getAllDevices);
 router.get('/', basketController.getAllBaskets);
 router.get('/one', authMiddleware, basketController.getOneBasket);
-router.delete('/devices/:id', authMiddleware, checkDeleteDeviceFromBasket, basketController.deleteDevice);
+router.delete(
+  '/devices/:id',
+  authMiddleware,
+  checkDeleteDeviceFromBasket,
+  basketController.deleteDevice,
+);
+router.delete('/', authMiddleware, basketController.deleteBasket);
 
 module.exports = router;

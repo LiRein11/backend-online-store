@@ -60,7 +60,7 @@ const OrderDevice = sequelize.define('order_device', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   deviceId: { type: DataTypes.INTEGER, allowNull: false },
   orderId: { type: DataTypes.INTEGER, allowNull: false },
-  count: { type: DataTypes.INTEGER, allowNull: false },
+  // count: { type: DataTypes.INTEGER, allowNull: false },
 });
 
 User.hasOne(Basket);
@@ -93,11 +93,14 @@ Brand.belongsToMany(Type, { through: TypeBrand });
 User.hasMany(Order);
 Order.belongsTo(User, {
   foreignKey: { name: 'userId' },
+  onDelete: 'CASCADE',
 });
 
 Order.hasMany(OrderDevice);
 OrderDevice.belongsTo(Order, {
   foreignKey: { name: 'orderId' },
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
 });
 
 module.exports = {
