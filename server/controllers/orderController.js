@@ -23,18 +23,29 @@ class OrderController {
           const token = auth.split(' ')[1];
           const { id } = jwt.verify(token, process.env.SECRET_KEY);
           row.userId = id;
-        }
-
-        await Order.create(row).then((order) => {
-          const { id } = order.get();
-          parseDevices.forEach(async (deviceId, i) => {
-            await OrderDevice.create({
-              deviceId: deviceId.deviceId,
-              orderId: id,
-              // count: basket[i].count,
+          await Order.create(row).then((order) => {
+            const { id } = order.get();
+            parseDevices.forEach(async (deviceId, i) => {
+              await OrderDevice.create({
+                deviceId: deviceId.deviceId,
+                orderId: id,
+                // count: basket[i].count,
+              });
             });
           });
-        });
+        } else{
+          await Order.create(row).then((order) => {
+            const { id } = order.get();
+            parseDevices.forEach(async (deviceId, i) => {
+              await OrderDevice.create({
+                deviceId: deviceId.id,
+                orderId: id,
+                // count: basket[i].count,
+              });
+            });
+          });
+        }
+
       } else {
         // Отправка сообщения о девайсах, которые не найдены в БД
         // const notFoundIdDevices = [];

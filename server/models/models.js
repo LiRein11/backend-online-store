@@ -93,14 +93,11 @@ Brand.belongsToMany(Type, { through: TypeBrand });
 User.hasMany(Order);
 Order.belongsTo(User, {
   foreignKey: { name: 'userId' },
-  onDelete: 'CASCADE',
 });
 
 Order.hasMany(OrderDevice);
 OrderDevice.belongsTo(Order, {
   foreignKey: { name: 'orderId' },
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
 });
 
 module.exports = {
